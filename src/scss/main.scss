@@ -1,0 +1,225 @@
+// Includes here
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700');
+@import 'mixins';
+// The code.
+.overflow-hidden {
+    overflow: hidden !important;
+}
+
+.philly-feedback {
+    display: none;
+    font-family: 'Open Sans', sans-serif;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 999;
+    overflow: hidden;
+    overflow-y: auto;
+    .pf-background {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        background-color: #0f4d90;
+        @include prefix(opacity,
+        0.9,
+        webkit ms o moz);
+    }
+    .dt {
+        display: table;
+        width: 100%;
+        height: 100%;
+    }
+    .dc {
+        display: table-cell;
+        &.middle {
+            vertical-align: middle;
+        }
+    }
+    .pf-wrapper {
+        border-radius: 3px;
+        background-color: #fff;
+        display: block;
+        margin: 15px auto;
+        position: relative;
+        z-index: 1;
+        max-width: 450px;
+        padding: 15px;
+        color: #444;
+        @include prefix(box-shadow,
+        0 3px 7px rgba(0, 0, 0, 0.3),
+        webkit ms moz);
+        @include prefix(background-clip,
+        padding-box,
+        webkit ms moz);
+        .logo {
+            margin-bottom: 1rem;
+        }
+        form {
+            .input-area {
+                margin: 15px 0;
+            }
+            label {
+                display: block;
+            }
+            small {
+                display: block;
+                font-style: italic;
+                line-height: 110%;
+                font-style: italic;
+                margin: 1rem 0;
+            }
+            input {
+                &[type="file"] {
+                    display: block;
+                }
+                &[type="text"],
+                &[type="email"] {
+                    @include prefix(outline,
+                    none,
+                    webkit ms o moz);
+                    font-size: 13px;
+                    background-color: #f0f0f0;
+                    border: 2px solid #f0f0f0;
+                    height: 30px;
+                    line-height: 30px;
+                    box-shadow: none;
+                    min-width: 200px;
+                    &:focus {
+                        border: 2px solid #25cef7;
+                        background-color: #fefefe;
+                    }
+                }
+            }
+            button {
+                font-weight: 700;
+                background-color: #25cef7;
+                color: #444;
+                text-transform: uppercase;
+                padding: .75rem .5rem;
+                letter-spacing: .03rem;
+                border: none;
+                &:hover {
+                    background-color: #444;
+                    color: #fff;
+                }
+                cursor: pointer;
+            }
+            textarea {
+                @include prefix(outline,
+                none,
+                webkit ms o moz);
+                font-size: 14px;
+                min-width: 80%;
+                background-color: #f0f0f0;
+                border: 2px solid #f0f0f0;
+                padding: 8px;
+                margin: 0;
+                box-sizing: border-box;
+                width: 100%;
+                &:focus {
+                    border: 2px solid #25cef7;
+                    background-color: #fefefe;
+                }
+            }
+        }
+        .pf-close {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            cursor: pointer;
+            background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUBAMAAAB/pwA+AAAAFVBMVEUAAAAPTZAOTpEPTZAPTZEQTpEPTZBq5vBaAAAABnRSTlMA+Efs2m8WAwQRAAAAXklEQVQI12NgNVFgAAIm5wCGsDQhEFMxLZXBLC1RASgolpbM4JYGFAYKpqUACaAwUBAoACbBfAawMFiQASwMEQQLgwXBwlBBBBOhAFUbwjCEFcgWI5yD7EiE05E8BADASCcNznQVBwAAAABJRU5ErkJggg==');
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
+    }
+    .last-input {
+        text-align: right;
+    }
+    .pf-message {
+        &.pf-error {
+            color: #cc3000;
+        }
+        &.pf-success {
+            color: #58c04d;
+        }
+    }
+    .spinner {
+        width: 25px;
+        height: 25px;
+        position: relative;
+        margin: 100px auto;
+    }
+    .double-bounce1,
+    .double-bounce2 {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background-color: #96c9ff;
+        opacity: 0.6;
+        position: absolute;
+        top: 0;
+        left: 0;
+        -webkit-animation: sk-bounce 2.0s infinite ease-in-out;
+        animation: sk-bounce 2.0s infinite ease-in-out;
+    }
+    .double-bounce2 {
+        -webkit-animation-delay: -1.0s;
+        animation-delay: -1.0s;
+    }
+    @-webkit-keyframes sk-bounce {
+        0%,
+        100% {
+            -webkit-transform: scale(0.0)
+        }
+        50% {
+            -webkit-transform: scale(1.0)
+        }
+    }
+    @keyframes sk-bounce {
+        0%,
+        100% {
+            transform: scale(0.0);
+            -webkit-transform: scale(0.0);
+        }
+        50% {
+            transform: scale(1.0);
+            -webkit-transform: scale(1.0);
+        }
+    }
+    .starting {
+        text-align: center;
+        color: #0f4d90;
+    }
+}
+
+@media only screen and (max-width: 480px) {
+    .philly-feedback {
+        font-size: 13px;
+        .pf-wrapper {
+            margin: 15px;
+            padding: 10px;
+            form {
+                .input-area {
+                    margin: 5px 0;
+                }
+                input {
+                    &[type="text"],
+                    &[type="email"] {
+                        line-height: 25px;
+                        height: 25px;
+                    }
+                }
+            }
+        }
+        p {
+            margin-bottom: 0.5rem;
+        }
+    }
+}

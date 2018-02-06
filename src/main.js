@@ -26,8 +26,13 @@ function fireBaseIsLoaded() {
 }
 
 $(() => {
+  // Setup the App
+  window.phillyFeedback = {};
+  window.phillyFeedback.app = app;
+  window.phillyFeedback.form = form;
+
+  // Initilize Firebase
   $('.philly-feedback-button').on('click', (event) => {
-    window.phillyFeedback = app;
     app.init();
     if (typeof firebase === 'undefined' || !firebase) {
       $.ajax({

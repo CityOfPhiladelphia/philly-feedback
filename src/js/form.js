@@ -109,13 +109,14 @@ const formObj = {
     showMessage(title, msg, clss) {
       if (formObj.timeout !== null) clearTimeout(formObj.timeout);
       $('.pf-message').remove();
-      const container = $('.last-input');
-      let message = [];
-      message.push($('<h4>', { class: `pf-message ${clss}` }).text(title));
-      message.push($('<p>', { class: `pf-message ${clss}` }).text(msg));
-      container.prepend(message);
+      const message = $('<div>', { class: `pf-message ${clss}` });
+      message.append($('<h4>').text(title));
+      message.append($('<p>').text(msg));
+      $('.last-input').prepend(message);
       formObj.timeout = setTimeout(() => {
-        $('.pf-message').remove();
+        message.fadeOut(() => {
+          message.remove();
+        });
       }, 7000);
     },
 
@@ -163,7 +164,7 @@ const formObj = {
       };
 
       try {
-        formObj.firebaseDatabase.collection("feedbacks").add(dataToSend)
+        formObj.firebaseDatabase.collection("feedbacks").doc(`${Date.now()}`).set(dataToSend)
         .then(function() {
           formObj.showMessage('Great!', 'We have got your feedback, thank you!', 'pf-success');
           formObj.form[0].reset();

@@ -11,28 +11,20 @@ export default {
       this.pf.fadeIn();
     },
     getLoading() {
-      const loadingHTML = `<div class="spinner">
-          <div class="double-bounce1"></div>
-          <div class="double-bounce2"></div>
-        </div>
-        <p class="starting">Hold on, setting everything up to liftoff!</p>`;
+      const loadingHTML = `<div class="spinner"><div class="double-bounce1"></div><div class="double-bounce2"></div></div><p class="starting">Hold on! We are setting everything up for liftoff!</p>`;
       return loadingHTML;
     },
     setForm(form) {
-      setTimeout(() => {
-        this.container.empty();
-        this.container.append(form);
-      }, 250);
+      this.container.empty();
+      this.container.append(form);
     },
     getError() {
       return $('<p>', { class: 'pf-message pf-error' })
-        .text('Ouch! something when wrong starting the Feedback Service, please do click on "close" and try again');
+        .text('Ouch! Something went wrong starting the Feedback Service. Please do click on "close" and try again');
     },
     setError() {
-      setTimeout(() => {
-        this.container.empty();
-        this.container.append(this.getError());
-      }, 250);
+      this.container.empty();
+      this.container.append(this.getError());
     },
     build() {
       const pf = $('<div>', { class: 'philly-feedback' });

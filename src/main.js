@@ -18,11 +18,9 @@ function fireBaseIsLoaded() {
     });
 
     firebase.auth().signInAnonymously().catch((error) => {
-      console.warn(error);
       app.setError();
     });
   } catch (err) {
-    console.warn(err);
     app.setError();
   }
 }

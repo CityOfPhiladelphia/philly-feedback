@@ -82,7 +82,6 @@ const formObj = {
 
     getFileUpload() {
       const input_area = this.getInputArea();
-      // input_area.append(this.getLabel('image', 'Submit image'));
       input_area.append($('<small>')
         .append('You can submit an image (jpg or png, 2MB max.) to support your comments'));
 
@@ -93,7 +92,6 @@ const formObj = {
         accept: 'image/jpeg, image/png'
       });
       this.file = file_input;
-      // file_input.on('change', this.upload);
 
       input_area.append(file_input);
 
@@ -108,21 +106,20 @@ const formObj = {
       return input_area;
     },
 
-    showMessage(msg, clss) {
+    showMessage(title, msg, clss) {
       if (formObj.timeout !== null) clearTimeout(formObj.timeout);
       $('.pf-message').remove();
       const container = $('.last-input');
-      const message = $('<p>', { class: `pf-message ${clss}` }).text(msg);
+      let message = [];
+      message.push($('<h4>', { class: `pf-message ${clss}` }).text(title));
+      message.push($('<p>', { class: `pf-message ${clss}` }).text(msg));
       container.prepend(message);
       formObj.timeout = setTimeout(() => {
-        message.fadeOut(() => {
-          message.remove();
-        })
+        $('.pf-message').remove();
       }, 7000);
     },
 
     setFireBase() {
-      // this.firebase = firebase;
       this.firebaseStorage = firebase.storage();
       this.firebaseDatabase = firebase.firestore();
     },
@@ -138,7 +135,7 @@ const formObj = {
       .catch((err) => {
         formObj.sending = false;
         formObj.button.text('Send');
-        formObj.showMessage(`There was an error uploading the image`, 'pf-error');
+        formObj.showMessage('Ehem, aawkwaarrd!', 'Something went wrong uploading the image. Please try again later.', 'pf-error');
       });
     },
 
@@ -147,7 +144,7 @@ const formObj = {
         var ref = this.firebaseStorage.child(formObj.uplodedFile);
         ref.delete();
       }
-      formObj.showMessage('There was an error sending the info, please try again', 'pf-error');
+      formObj.showMessage('Ehem, aawkwaarrd!', 'Something went wrong sending the feedback. Please try again later.', 'pf-error');
       formObj.sending = false;
       formObj.button.text('Send');
     },
@@ -168,7 +165,7 @@ const formObj = {
       try {
         formObj.firebaseDatabase.collection("feedbacks").add(dataToSend)
         .then(function() {
-          formObj.showMessage('Thanks for your feedback!', 'pf-success');
+          formObj.showMessage('Great!', 'We have got your feedback, thank you!', 'pf-success');
           formObj.form[0].reset();
           formObj.sending = false;
           formObj.button.text('Send');

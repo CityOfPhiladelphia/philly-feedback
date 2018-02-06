@@ -142,7 +142,17 @@
     .last-input {
         text-align: right;
     }
+    h4.pf-message {
+        margin: 0;
+        font-weight: bold;
+        font-size: 14px;
+    }
+    p.pf-message{
+        font-size: 13px;
+        font-weight: 300;
+    }
     .pf-message {
+        text-align: left;
         &.pf-error {
             color: #cc3000;
         }

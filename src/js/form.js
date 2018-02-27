@@ -4,6 +4,7 @@ const phillyFormObj = {
     sending: false,
     timeout: null,
     uplodedFile: null,
+    uplodedURL: null,
     form: null,
     firebaseStorage: null,
     firebaseDatabase: null,
@@ -146,18 +147,32 @@ const phillyFormObj = {
       const ref = storageRef.child(fileName);
       ref.put(file).then(function(snapshot) {
         phillyFormObj.uplodedFile = fileName;
-        phillyFormObj.saveData();
+        phillyFormObj.getUploadedURL();
       })
       .catch((err) => {
         phillyFormObj.sending = false;
         phillyFormObj.button.text('Send');
+        console.log("Error", err);
         phillyFormObj.setError('Ehem, aawkwaarrd!', 'Something went wrong uploading the image. Please try again later.');
       });
     },
 
+    getUploadedURL() {
+      const storageRef = phillyFormObj.firebaseStorage.ref();
+      var ref = storageRef.child(phillyFormObj.uplodedFile);
+      ref.getDownloadURL().then(function(url) {
+        phillyFormObj.uplodedURL = url;
+        phillyFormObj.saveData();
+      }).catch(function(error) {
+        phillyFormObj.saveDataError(error);
+      });
+    },
+
     saveDataError(err) {
+      console.log("Error", err);
       if (phillyFormObj.uplodedFile !== null) {
-        var ref = this.firebaseStorage.child(phillyFormObj.uplodedFile);
+        const storageRef = phillyFormObj.firebaseStorage.ref();
+        var ref = storageRef.child(phillyFormObj.uplodedFile);
         ref.delete();
       }
       phillyFormObj.setError('Ehem, aawkwaarrd!', 'Something went wrong sending the feedback. Please try again later.');
@@ -166,7 +181,7 @@ const phillyFormObj = {
     },
 
     saveData() {
-      const image = phillyFormObj.uplodedFile  || null;
+      const image = phillyFormObj.uplodedURL  || null;
       const dataToSend = {
         name: this.name.val(),
         email: this.email.val(),

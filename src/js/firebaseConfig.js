@@ -1,8 +1,8 @@
 export default {
-  apiKey: "AIzaSyD5Cj2vNqaRh91uH4NblZNURCJejD1wkPQ",
-  authDomain: "phila-test.firebaseapp.com",
-  databaseURL: "https://phila-test.firebaseio.com",
-  projectId: "phila-test",
-  storageBucket: "phila-test.appspot.com",
-  messagingSenderId: "369345558420"
+  apiKey: "AIzaSyDiK1pFLSQL2KfZlcOMLzmBBw7kOlioI4k",
+  authDomain: "philly-feedback.firebaseapp.com",
+  databaseURL: "https://philly-feedback.firebaseio.com",
+  projectId: "philly-feedback",
+  storageBucket: "philly-feedback.appspot.com",
+  messagingSenderId: "761632853920"
 };;

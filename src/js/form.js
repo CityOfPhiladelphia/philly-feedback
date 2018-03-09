@@ -146,30 +146,17 @@ const phillyFormObj = {
       const fileName = `images/${Date.now()}.jpg`;
       const ref = storageRef.child(fileName);
       ref.put(file).then(function(snapshot) {
-        phillyFormObj.uplodedFile = fileName;
-        phillyFormObj.getUploadedURL();
+        phillyFormObj.uplodedURL = snapshot.downloadURL;
+        phillyFormObj.saveData();
       })
       .catch((err) => {
         phillyFormObj.sending = false;
         phillyFormObj.button.text('Send');
-        console.log("Error", err);
         phillyFormObj.setError('Ehem, aawkwaarrd!', 'Something went wrong uploading the image. Please try again later.');
       });
     },
 
-    getUploadedURL() {
-      const storageRef = phillyFormObj.firebaseStorage.ref();
-      var ref = storageRef.child(phillyFormObj.uplodedFile);
-      ref.getDownloadURL().then(function(url) {
-        phillyFormObj.uplodedURL = url;
-        phillyFormObj.saveData();
-      }).catch(function(error) {
-        phillyFormObj.saveDataError(error);
-      });
-    },
-
     saveDataError(err) {
-      console.log("Error", err);
       if (phillyFormObj.uplodedFile !== null) {
         const storageRef = phillyFormObj.firebaseStorage.ref();
         var ref = storageRef.child(phillyFormObj.uplodedFile);
@@ -178,6 +165,21 @@ const phillyFormObj = {
       phillyFormObj.setError('Ehem, aawkwaarrd!', 'Something went wrong sending the feedback. Please try again later.');
       phillyFormObj.sending = false;
       phillyFormObj.button.text('Send');
+    },
+
+    getMetaData() {
+      const metatags = $("meta[property^='philly:']");
+      var metadata = new Array();
+      metatags.each(function() {
+        const n = $.trim($(this).attr('property').replace('philly:', ''));
+        const v = $.trim($(this).attr('content'));
+        metadata.push({
+          name: n,
+          value: v
+        });
+      });
+
+      return metadata;
     },
 
     saveData() {
@@ -191,6 +193,8 @@ const phillyFormObj = {
         href: location.href,
         origin: location.origin,
         datetime: firebase.firestore.FieldValue.serverTimestamp(),
+        metadata: phillyFormObj.getMetaData(),
+        notified: false
       };
 
       try {
@@ -200,12 +204,15 @@ const phillyFormObj = {
           phillyFormObj.form[0].reset();
           phillyFormObj.sending = false;
           phillyFormObj.button.text('Send');
+          phillyFormObj.uplodedURL = null;
         })
         .catch(function(err) {
           phillyFormObj.saveDataError(err);
+          phillyFormObj.uplodedURL = null;
         });
       } catch(err) {
         phillyFormObj.saveDataError(err);
+        phillyFormObj.uplodedURL = null;
       }
     },
 

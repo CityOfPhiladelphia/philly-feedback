@@ -10,16 +10,9 @@ function fireBaseIsLoaded() {
       firebase.initializeApp(firebaseConfig)
     }
 
-    firebase.auth().onAuthStateChanged(function(user) {
-      if (user) {
-        form.setFireBase();
-        app.setForm(form.build());
-      }
-    });
+    form.setFireBase();
+    app.setForm(form.build());
 
-    firebase.auth().signInAnonymously().catch((error) => {
-      app.setError();
-    });
   } catch (err) {
     app.setError();
   }

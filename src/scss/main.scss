@@ -18,6 +18,25 @@
     z-index: 999;
     overflow: hidden;
     overflow-y: auto;
+
+    .pf-container {
+        margin-top: 20px;
+    }
+
+    h3, p, label, button, a {
+        margin: 0;
+        padding: 0;
+        border: 0;
+        font-size: 100%;
+        font: inherit;
+        vertical-align: baseline;
+        line-height: 1.5;
+    }
+
+    h3 {
+        font-size: 1.5rem;
+    }
+
     .pf-background {
         position: fixed;
         width: 100%;
@@ -88,9 +107,15 @@
                 display: block;
                 &.checkbox-label {
                     font-size: 13px;
+                    font-weight: normal;
                     input {
+                        margin: 0;
                         vertical-align: middle;
                         margin-top: -3px;
+                        display: inline-block;
+                        top: 0;
+                        position: relative;
+                        margin-bottom: 0;
                     }
                 }
             }

@@ -82,7 +82,7 @@ const phillyFormObj = {
 
     getConsentField() {
       const input_area = this.getInputArea();
-      this.consentLabel = $('<label>', { class: 'checkbox-label' }).text(" Check this box if you would like to be contacted about this feedback at the e-mail address provided");
+      this.consentLabel = $('<label>', { class: 'checkbox-label' }).text(" Check this box if you would like to be contacted about this feedback at the e-mail address provided above");
       this.consent = $('<input>', {
           id: 'pf-consent',
           name: 'pf-consent',

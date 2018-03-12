@@ -1,6 +1,5 @@
 const title = 'Feedback Service';
-const lorem = `Donec nec justo eget felis facilisis fermentum. 
-Aliquam porttitor mauris sit amet orci. Aenean dignissim pellentesque felis.`;
+const lorem = `Please, use the form below to provide feedback about your experience with this web page. Your feedback is vital to help us improve the quality of our services.`;
 
 export default {
     pf: null,

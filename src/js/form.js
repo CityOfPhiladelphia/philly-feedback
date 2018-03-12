@@ -12,6 +12,8 @@ const phillyFormObj = {
     // Form elements
     name: null,
     email: null,
+    consent: null,
+    consentLabel: null,
     textarea: null,
     file: null,
 
@@ -22,6 +24,7 @@ const phillyFormObj = {
 
       this.form.append(this.getName());
       this.form.append(this.getEmail());
+      this.form.append(this.getConsentField());
       this.form.append(this.getTextArea());
       if(typeof(window.FileReader)!="undefined"){
         this.form.append(this.getFileUpload());
@@ -62,7 +65,32 @@ const phillyFormObj = {
           type: 'email',
           placeholder: '(Optional)',
         });
+
+      this.email.focusout(this.emailFocusOut);
       input_area.append(this.email);
+      return input_area;
+    },
+
+    emailFocusOut() {
+        if($(phillyFormObj.email).val()) {
+          phillyFormObj.consentLabel.show();
+        } else {
+          phillyFormObj.consentLabel.hide();
+          phillyFormObj.consent.prop('checked', false);
+        }
+    },
+
+    getConsentField() {
+      const input_area = this.getInputArea();
+      this.consentLabel = $('<label>', { class: 'checkbox-label' }).text(" Check this box if you would like to be contacted about this feedback at the e-mail address provided");
+      this.consent = $('<input>', {
+          id: 'pf-consent',
+          name: 'pf-consent',
+          type: 'checkbox',
+          value: 1,
+        });
+      this.consentLabel.hide();
+      input_area.append(this.consentLabel.prepend(this.consent));
       return input_area;
     },
 
@@ -93,7 +121,6 @@ const phillyFormObj = {
         accept: 'image/jpeg, image/png'
       });
       this.file = file_input;
-
       input_area.append(file_input);
 
       return input_area;
@@ -119,7 +146,7 @@ const phillyFormObj = {
       window.phillyFeedback.app.container.empty();
       window.phillyFeedback.app.container.append(message);
       const closeBtn = $('<button>', { class: 'pf-close-btn' })
-        .text('Ok, looks good!')
+        .text('Close')
         .on('click', window.phillyFeedback.app.close);
       window.phillyFeedback.app.container.append(closeBtn);
     },
@@ -187,6 +214,7 @@ const phillyFormObj = {
       const dataToSend = {
         name: this.name.val(),
         email: this.email.val(),
+        consentToContact: (this.consent.is(':checked')) ? true : false,
         feedback: this.textarea.val(),
         pageTitle: $('title').eq(0).text(),
         image,
@@ -194,14 +222,16 @@ const phillyFormObj = {
         origin: location.origin,
         datetime: firebase.firestore.FieldValue.serverTimestamp(),
         metadata: phillyFormObj.getMetaData(),
-        notified: false
+        notified: false,
       };
 
       try {
         phillyFormObj.firebaseDatabase.collection("feedbacks").doc(`${Date.now()}`).set(dataToSend)
         .then(function() {
-          phillyFormObj.setSuccess('Great!', 'We have got your feedback, thank you!');
+          phillyFormObj.setSuccess('Great!', 'Thank you for your feedback. Your opinion is valuable to us!');
           phillyFormObj.form[0].reset();
+          phillyFormObj.consent.prop('checked', false);
+          phillyFormObj.consentLabel.hide();
           phillyFormObj.sending = false;
           phillyFormObj.button.text('Send');
           phillyFormObj.uplodedURL = null;

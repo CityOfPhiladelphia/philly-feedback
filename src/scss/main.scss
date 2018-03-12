@@ -86,6 +86,13 @@
             }
             label {
                 display: block;
+                &.checkbox-label {
+                    font-size: 13px;
+                    input {
+                        vertical-align: middle;
+                        margin-top: -3px;
+                    }
+                }
             }
             small {
                 display: block;
@@ -136,11 +143,11 @@
         }
         .pf-close {
             display: inline-block;
-            width: 20px;
-            height: 20px;
+            width: 15px;
+            height: 15px;
             position: absolute;
-            top: 5px;
-            right: 5px;
+            top: 10px;
+            right: 10px;
             cursor: pointer;
             background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUBAMAAAB/pwA+AAAAFVBMVEUAAAAPTZAOTpEPTZAPTZEQTpEPTZBq5vBaAAAABnRSTlMA+Efs2m8WAwQRAAAAXklEQVQI12NgNVFgAAIm5wCGsDQhEFMxLZXBLC1RASgolpbM4JYGFAYKpqUACaAwUBAoACbBfAawMFiQASwMEQQLgwXBwlBBBBOhAFUbwjCEFcgWI5yD7EiE05E8BADASCcNznQVBwAAAABJRU5ErkJggg==');
             background-size: contain;

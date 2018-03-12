@@ -4,6 +4,8 @@ import app from './js/container';
 import form from './js/form';
 import firebaseConfig from './js/firebaseConfig';
 
+const DEBUG = true;
+
 function fireBaseIsLoaded() {
   try {
     if (!firebase.apps.length) {
@@ -14,6 +16,7 @@ function fireBaseIsLoaded() {
     app.setForm(form.build());
 
   } catch (err) {
+    if(DEBUG) console.log(err);
     app.setError();
   }
 }
@@ -40,12 +43,14 @@ $(() => {
             success() {
               fireBaseIsLoaded();
             },
-            error() {
+            error(err) {
+              if(DEBUG) console.log(err);
               app.setError();
             },
           });
         },
-        error() {
+        error(err) {
+          if(DEBUG) console.log(err);
           app.setError();
         },
       });

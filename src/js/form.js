@@ -6,8 +6,6 @@ const phillyFormObj = {
     uplodedFile: null,
     uplodedURL: null,
     form: null,
-    firebaseStorage: null,
-    firebaseDatabase: null,
 
     // Form elements
     name: null,
@@ -18,7 +16,7 @@ const phillyFormObj = {
     file: null,
 
     build() {
-      this.form = $('<form>', { action: '', name: 'send-philly-feedback' });
+      this.form = $('<form>', { action: '', name: 'send-philly-feedback', enctype: 'multipart/form-data' });
       // Append submit event
       this.form.on('submit', this.submit);
 
@@ -163,32 +161,7 @@ const phillyFormObj = {
       }, 7000);
     },
 
-    setFireBase() {
-      this.firebaseStorage = firebase.storage();
-      this.firebaseDatabase = firebase.firestore();
-    },
-
-    upload(file) {
-      const storageRef = phillyFormObj.firebaseStorage.ref();
-      const fileName = `images/${Date.now()}.jpg`;
-      const ref = storageRef.child(fileName);
-      ref.put(file).then(function(snapshot) {
-        phillyFormObj.uplodedURL = snapshot.downloadURL;
-        phillyFormObj.saveData();
-      })
-      .catch((err) => {
-        phillyFormObj.sending = false;
-        phillyFormObj.button.text('Send');
-        phillyFormObj.setError('Ehem, aawkwaarrd!', 'Something went wrong uploading the image. Please try again later.');
-      });
-    },
-
     saveDataError(err) {
-      if (phillyFormObj.uplodedFile !== null) {
-        const storageRef = phillyFormObj.firebaseStorage.ref();
-        var ref = storageRef.child(phillyFormObj.uplodedFile);
-        ref.delete();
-      }
       phillyFormObj.setError('Ehem, aawkwaarrd!', 'Something went wrong sending the feedback. Please try again later.');
       phillyFormObj.sending = false;
       phillyFormObj.button.text('Send');
@@ -209,53 +182,42 @@ const phillyFormObj = {
       return metadata;
     },
 
-    saveData() {
-      const image = phillyFormObj.uplodedURL  || null;
-      const dataToSend = {
-        name: this.name.val(),
-        email: this.email.val(),
-        consentToContact: (this.consent.is(':checked')) ? true : false,
-        feedback: this.textarea.val(),
-        pageTitle: $('title').eq(0).text(),
-        image,
-        href: location.href,
-        origin: location.origin,
-        datetime: firebase.firestore.FieldValue.serverTimestamp(),
-        metadata: phillyFormObj.getMetaData(),
-        notified: false,
-      };
-
-      try {
-        phillyFormObj.firebaseDatabase.collection("feedbacks").doc(`${Date.now()}`).set(dataToSend)
-        .then(function() {
-          phillyFormObj.setSuccess('Great!', 'Thank you for your feedback. Your opinion is valuable to us!');
-          phillyFormObj.form[0].reset();
-          phillyFormObj.consent.prop('checked', false);
-          phillyFormObj.consentLabel.hide();
-          phillyFormObj.sending = false;
-          phillyFormObj.button.text('Send');
-          phillyFormObj.uplodedURL = null;
-        })
-        .catch(function(err) {
-          phillyFormObj.saveDataError(err);
-          phillyFormObj.uplodedURL = null;
-        });
-      } catch(err) {
-        phillyFormObj.saveDataError(err);
-        phillyFormObj.uplodedURL = null;
-      }
-    },
-
     submit(evt) {
+      evt.preventDefault();
+
       if (!phillyFormObj.sending) {
-        phillyFormObj.uplodedFile = null;
         phillyFormObj.sending = true;
         phillyFormObj.button.text('Sending...');
-        if (phillyFormObj.file[0] && phillyFormObj.file[0].files && phillyFormObj.file[0].files[0]) {
-          phillyFormObj.upload(phillyFormObj.file[0].files[0]);
-        } else {
-          phillyFormObj.saveData();
-        }
+       
+        var form = phillyFormObj.form[0];
+        var data = new FormData(form);
+
+        data.append('pf-pageTitle', $('title').eq(0).text());
+        data.append('pf-href', location.href);
+        data.append('pf-origin', location.origin);
+        data.append('pf-metadata', JSON.stringify(phillyFormObj.getMetaData()));
+
+        $.ajax({
+          type: "POST",
+          enctype: 'multipart/form-data',
+          url: "http://localhost:3000/feedback",
+          data: data,
+          processData: false,
+          contentType: false,
+          cache: false,
+          timeout: 600000,
+          success: function (data) {
+            phillyFormObj.setSuccess('Great!', 'Thank you for your feedback. Your opinion is valuable to us!');
+            phillyFormObj.form[0].reset();
+            phillyFormObj.consent.prop('checked', false);
+            phillyFormObj.consentLabel.hide();
+            phillyFormObj.sending = false;
+            phillyFormObj.button.text('Send');
+          },
+          error: function (error) {
+            phillyFormObj.saveDataError(error);
+          }
+        });
       }
 
       evt.preventDefault();

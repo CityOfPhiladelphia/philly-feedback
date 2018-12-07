@@ -12,7 +12,7 @@ $(() => {
   window.phillyFeedback.form = form;
 
   // Initilize Firebase
-  $('.philly-feedback-button').on('click', (event) => {
+  $(document).on('click', '.philly-feedback-button', (event) => {
     
     try {
       app.init();
